@@ -1,14 +1,21 @@
 import { Hono } from 'hono';
 import health from './routes/health.route';
 import { AppDataSource } from './database/datasource';
+import { UserRepository } from './repositories/UserRepository';
+import { userRoutes } from './routes/user.route';
 
 const app = new Hono();
 
 app.route('/health', health);
+app.route('/users', userRoutes);
 try {
   await AppDataSource.initialize();
 
   console.log('✅ Database connected.');
+
+  const userRepository = new UserRepository();
+
+  console.log(await userRepository.findByEmail('test@test.com'));
 
   Bun.serve({
     fetch: app.fetch,

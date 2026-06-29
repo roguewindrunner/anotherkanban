@@ -1,9 +1,12 @@
 {
   "name": "api",
+  "type": "module",
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --hot src/index.ts",
+    "migrate": "bun run src/database/migrate.ts"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.2",
     "hono": "^4.12.27",
     "pg": "^8.22.0",
