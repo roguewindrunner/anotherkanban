@@ -3,6 +3,7 @@ import { CreateUserRequest } from '../dto/CreateUserRequest';
 import { CreateUserResponse } from '../dto/CreateUserResponse';
 import { UserRepository } from '../repositories/UserRepository';
 import { User } from '../entities/User';
+import { EmailAlreadyExistsError } from '../errors/EmailAlreadyExistsError';
 
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
@@ -11,7 +12,7 @@ export class UserService {
     const existingUser = await this.userRepository.findByEmail(request.email);
 
     if (existingUser) {
-      throw new Error('Email already exists.');
+      throw new EmailAlreadyExistsError(request.email);
     }
 
     const passwordHash = await bcrypt.hash(request.password, 12);
