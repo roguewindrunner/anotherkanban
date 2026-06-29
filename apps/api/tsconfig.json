@@ -1,7 +1,9 @@
 {
+  "extends": "../../packages/tsconfig/base.json",
+
   "compilerOptions": {
-    "strict": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
-  }
+    "outDir": "./dist"
+  },
+
+  "include": ["src"]
 }
