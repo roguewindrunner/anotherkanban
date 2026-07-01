@@ -1,12 +1,12 @@
 import { Context } from 'hono';
 import { UserService } from '../services/UserService';
-import { CreateUserRequest } from '../dto/CreateUserRequest';
+import { createUserSchema } from '../schemas/CreateUserRequestSchema';
 
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   async create(c: Context) {
-    const request = await c.req.json<CreateUserRequest>();
+    const request = createUserSchema.parse(await c.req.json());
 
     const response = await this.userService.create(request);
 

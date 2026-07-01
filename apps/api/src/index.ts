@@ -1,12 +1,19 @@
 import { Hono } from 'hono';
 import health from './routes/health.route';
-import { AppDataSource } from './database/datasource';
+import { AppDataSource } from './database/data-source';
 import { UserRepository } from './repositories/UserRepository';
 import { userRoutes } from './routes/user.route';
 import { AppError } from './errors/AppError';
 import { ContentfulStatusCode } from 'hono/utils/http-status';
+import { ZodError, ZodType } from 'zod';
 
-const app = new Hono();
+type AppEnv = {
+  Variables: {
+    validatedBody: unknown;
+  };
+};
+
+const app = new Hono<AppEnv>();
 
 app.route('/health', health);
 app.route('/users', userRoutes);
@@ -41,7 +48,23 @@ app.onError((err, c) => {
           message: err.message,
         },
       },
-      err.statusCode as ContentfulStatusCode
+      err.statusCode as ContentfulStatusCode,
+    );
+  }
+  if (err instanceof ZodError) {
+    return c.json(
+      {
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Request validation failed.',
+        },
+        details: err.issues.map((issue) => ({
+          field: issue.path.join('.'),
+          message: issue.message,
+        })),
+      },
+      400,
     );
   }
 
@@ -56,7 +79,7 @@ app.onError((err, c) => {
         message: 'Something went wrong.',
       },
     },
-    500
+    500,
   );
 });
 

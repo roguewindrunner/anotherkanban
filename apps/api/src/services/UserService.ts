@@ -1,9 +1,10 @@
 import bcrypt from 'bcryptjs';
-import { CreateUserRequest } from '../dto/CreateUserRequest';
+
 import { CreateUserResponse } from '../dto/CreateUserResponse';
 import { UserRepository } from '../repositories/UserRepository';
 import { User } from '../entities/User';
 import { EmailAlreadyExistsError } from '../errors/EmailAlreadyExistsError';
+import { CreateUserRequest } from '../schemas/CreateUserRequestSchema';
 
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
