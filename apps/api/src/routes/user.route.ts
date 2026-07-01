@@ -9,5 +9,3 @@ const userService = new UserService(userRepository);
 const userController = new UserController(userService);
 
 export const userRoutes = new Hono();
-
-userRoutes.post('/', (c) => userController.create(c));

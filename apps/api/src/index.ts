@@ -6,6 +6,7 @@ import { userRoutes } from './routes/user.route';
 import { AppError } from './errors/AppError';
 import { ContentfulStatusCode } from 'hono/utils/http-status';
 import { ZodError, ZodType } from 'zod';
+import { authRoutes } from './routes/auth.route';
 
 type AppEnv = {
   Variables: {
@@ -17,6 +18,7 @@ const app = new Hono<AppEnv>();
 
 app.route('/health', health);
 app.route('/users', userRoutes);
+app.route('/auth', authRoutes);
 try {
   await AppDataSource.initialize();
 
